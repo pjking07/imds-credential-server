@@ -219,7 +219,7 @@ func (cfg *Config) handleRequest(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if req.URL.Path == "/latest/meta-data/iam/security-credentials/" {
+	if strings.TrimSuffix(req.URL.Path, "/") == "/latest/meta-data/iam/security-credentials" {
 		cfg.handleRoleRequest(w, req)
 		return
 	} else {
@@ -354,7 +354,7 @@ func (cfg *Config) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Println(req.Method, req.URL.Path)
 	if req.URL.Path == "/latest/api/token" {
 		cfg.handleTokenRequest(w, req)
-	} else if strings.HasPrefix(req.URL.Path, "/latest/meta-data/iam/security-credentials/") {
+	} else if strings.HasPrefix(req.URL.Path, "/latest/meta-data/iam/security-credentials") {
 		cfg.handleRequest(w, req)
 	} else {
 		writeError(w, http.StatusNotFound, "InvalidPath", "Invalid path")
